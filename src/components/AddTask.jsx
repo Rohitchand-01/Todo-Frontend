@@ -9,7 +9,7 @@ const AddTask = ({ setTasks }) => {
     e.preventDefault();
     const newTask = { title, description, status: 'pending' };
 
-    axios.post('http://localhost:3000/tasks', newTask)
+    axios.post('${import.meta.env.VITE_DEPLOYEDHOSTNAME}/tasks', newTask)
       .then((response) => {
         setTasks((prevTasks) => [...prevTasks, response.data]);
         setTitle('');

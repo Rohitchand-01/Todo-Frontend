@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const App = () => {
+  const baseURL = import.meta.env.VITE_DEPLOYEDHOSTNAME ;
+  console.log(import.meta.env.VITE_DEPLOYEDHOSTNAME)
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
   const [loading, setLoading] = useState(false);
@@ -11,16 +13,17 @@ const App = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:3000/tasks")
+      .get(`${baseURL}/tasks`)
       .then((response) => {
         setTasks(response.data);
         setLoading(false);
       })
       .catch((error) => {
+        console.error("Error fetching tasks:", error);
         setError("Error fetching tasks");
         setLoading(false);
       });
-  }, []);
+  }, [baseURL]);
 
   // Add a new task
   const handleAddTask = () => {
@@ -31,13 +34,14 @@ const App = () => {
 
     setLoading(true);
     axios
-      .post("http://localhost:3000/tasks", newTask)
+      .post(`${baseURL}/tasks`, newTask)
       .then((response) => {
         setTasks((prevTasks) => [...prevTasks, response.data]);
         setNewTask({ title: "", description: "" });
         setLoading(false);
       })
       .catch((error) => {
+        console.error("Error adding task:", error);
         setError("Error adding task");
         setLoading(false);
       });
@@ -47,7 +51,7 @@ const App = () => {
   const handleUpdateTask = (id, status) => {
     setLoading(true);
     axios
-      .put(`http://localhost:3000/tasks/${id}`, { status })
+      .put(`${baseURL}/tasks/${id}`, { status })
       .then((response) => {
         setTasks((prevTasks) =>
           prevTasks.map((task) => (task._id === id ? response.data : task))
@@ -55,6 +59,7 @@ const App = () => {
         setLoading(false);
       })
       .catch((error) => {
+        console.error("Error updating task:", error);
         setError("Error updating task");
         setLoading(false);
       });
@@ -64,12 +69,13 @@ const App = () => {
   const handleDeleteTask = (id) => {
     setLoading(true);
     axios
-      .delete(`http://localhost:3000/tasks/${id}`)
+      .delete(`${baseURL}/tasks/${id}`)
       .then(() => {
         setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
         setLoading(false);
       })
       .catch((error) => {
+        console.error("Error deleting task:", error);
         setError("Error deleting task");
         setLoading(false);
       });

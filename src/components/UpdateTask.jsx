@@ -5,7 +5,7 @@ const UpdateTask = ({ task, setTasks }) => {
   const [status, setStatus] = useState(task.status);
 
   const handleUpdate = () => {
-    axios.put(`http://localhost:3000/tasks/${task._id}`, { status })
+    axios.put(`${import.meta.env.VITE_DEPLOYEDHOSTNAME}/tasks/${task._id}`, { status })
       .then((response) => {
         setTasks((prevTasks) =>
           prevTasks.map((t) => (t._id === task._id ? response.data : t))
